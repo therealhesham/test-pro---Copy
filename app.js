@@ -1,29 +1,35 @@
-const express =require("express");
-const mongoose = require('mongoose');
-const path =require("path");
-const { User } = require("./models/userModel");
-require("dotenv").config()
-app = express();
+const express = require('express');
+const path = require("path")
 
-app.use(express.json())
-app.use(express.urlencoded({}))
-// User
-// app.use(express.static(path.join(__dirname, 'public')))
-// app.use("/")
-app.get('/index', function(req, res){
+const bodyParser = require( 'body-parser');
+const { MongoClient } = require ( 'mongodb');
+const { User } = require('./models/userModel');
+const app = express ();
+const port = 3000;
+
+const uri = "mongodb+srv://youssef:youssef@test-pro-db.pdeeivd.mongodb.net/youssefdatabase?retryWrites=true&w=majority";
+app.use(bodyParser.urlencoded({ extended: true }));
+app.get('/', function(req, res){
     res.sendFile(path.join(__dirname, 'public' , 'index.html'));
   });
-app.post("/signup",async (req,res)=> {
-    
-const {name,name1,name2,name3,name4}=req.body;
 
-
-const dataSaver= new User({email:name,name:name1});
-const saver = await dataSaver.save();
+app.post('/addData', async (req, res) =>{
+const user=new User({email:req.body.email,password:req.body.password})
+const saver = await user.save();
 res.send(saver);
-})
+}) ;
 
-app.listen(5000,function(){
 
-    console.log('Server is running')
-});
+app.post("/",(req,res)=> {
+    const myData = req.body.myData ;
+    
+    
+    
+    var data = {
+                "myData":myData,
+
+            };
+        })
+        app.listen (port, () =>{
+        console. log (`Server is running on http://localhost:${port}`);
+        });
